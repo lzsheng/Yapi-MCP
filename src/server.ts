@@ -17,7 +17,7 @@ export class YapiMcpServer {
   private sseTransport: SSEServerTransport | null = null;
   private readonly isStdioMode: boolean;
 
-  constructor(yapiBaseUrl: string, yapiToken: string, yapiLogLevel: string = "info", yapiCacheTTL: number = 360) {
+  constructor(yapiBaseUrl: string, yapiToken: string, yapiLogLevel: string = "info", yapiCacheTTL: number = 10) {
     this.logger = new Logger("YapiMCP", yapiLogLevel);
     this.yapiService = new YApiService(yapiBaseUrl, yapiToken, yapiLogLevel);
     this.projectInfoCache = new ProjectInfoCache(yapiCacheTTL);
@@ -28,7 +28,7 @@ export class YapiMcpServer {
     
     this.server = new McpServer({
       name: "Yapi MCP Server",
-      version: "0.2.0",
+      version: "0.2.1",
     });
 
     this.registerTools();
@@ -577,6 +577,7 @@ export class YapiMcpServer {
     app.post("/messages", async (req: Request, res: Response) => {
       if (!this.sseTransport) {
         // Express types 可能与实际使用不匹配，直接使用
+        // @ts-ignore
         res.sendStatus(400);
         return;
       }

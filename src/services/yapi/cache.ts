@@ -20,9 +20,10 @@ export class ProjectInfoCache {
   private readonly logger: Logger;
   private readonly cacheTTLMinutes: number;
   
-  constructor(cacheTTLMinutes: number = 360) {
-    // 默认缓存文件保存在当前工作目录下的 .yapi-cache 目录
-    const cacheDir = path.join(process.cwd(), '.yapi-cache');
+  constructor(cacheTTLMinutes: number = 10) {
+    // 使用项目根目录来存储缓存文件
+    const projectRoot = path.resolve(__dirname, '../../..');
+    const cacheDir = path.join(projectRoot, '.yapi-cache');
     
     // 确保缓存目录存在
     if (!fs.existsSync(cacheDir)) {

@@ -51,7 +51,7 @@ export function getServerConfig(): ServerConfig {
       },
       "yapi-cache-ttl": {
         type: "number",
-        description: "YApi缓存有效期（分钟），默认360分钟（6小时）",
+        description: "YApi缓存有效期（分钟），默认10分钟",
       },
       "yapi-log-level": {
         type: "string",
@@ -66,7 +66,7 @@ export function getServerConfig(): ServerConfig {
     yapiBaseUrl: "http://localhost:3000",
     yapiToken: "",
     port: 3333,
-    yapiCacheTTL: 360, // 默认缓存6小时
+    yapiCacheTTL: 10, // 默认缓存10分钟
     yapiLogLevel: "info", // 默认日志级别
     configSources: {
       yapiBaseUrl: "default",

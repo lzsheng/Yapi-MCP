@@ -17,8 +17,8 @@ YAPI_TOKEN=projectId:your_yapi_token_here,projectId2:your_yapi_token2_here
 # 项目基础URL
 YAPI_BASE_URL=your_yapi_base_url_here
 
-# 缓存时效(分钟)，默认360分钟(6小时)
-YAPI_CACHE_TTL=360
+# 缓存时效(分钟)，默认10分钟
+YAPI_CACHE_TTL=10
 
 # 日志级别: debug, info, warn, error, none
 # - debug: 输出所有日志，包括详细的调试信息
@@ -31,9 +31,18 @@ YAPI_LOG_LEVEL=info
 
 
 ## MCP Server 启动
+### sse模式
 ```bash
 pnpm install
 pnpm run dev
+```
+
+### stdio启动
+1、pnpm run build  
+2、复制dist/cli.js的地址，如 User/xxxx/dist/cli.js  
+3、stdio方式启动
+```bash
+node User/xxxx/dist/cli.js --stdio --yapi-base-url=https://yapi.xxxxx.com --yapi-token=projectId:token --yapi-cache-ttl=10 
 ```
 
 ## 如何获取 token
@@ -43,7 +52,7 @@ pnpm run dev
 YAPI_TOKEN=1026:c1abxxxxxxxxxx
 ```
 
-## 在Cursor中使用
+## 在Cursor中使用（SSE）
 ```json
 {
   "mcpServers": {
@@ -55,6 +64,7 @@ YAPI_TOKEN=1026:c1abxxxxxxxxxx
 }
 ```
 ![Alt text](./images/sse-link.png)
+
 
 ## 使用例子
 ![Alt text](./images/demo1.png)
