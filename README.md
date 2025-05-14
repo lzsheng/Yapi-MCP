@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/lzsheng-yapi-mcp-badge.png)](https://mseep.ai/app/lzsheng-yapi-mcp)
+
 # Yapi MCP Server
 
 ## 环境配置
