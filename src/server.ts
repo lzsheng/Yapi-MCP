@@ -326,14 +326,16 @@ export class YapiMcpServer {
         projectKeyword: z.string().optional().describe("项目关键字，用于过滤项目"),
         nameKeyword: z.string().optional().describe("接口名称关键字"),
         pathKeyword: z.string().optional().describe("接口路径关键字"),
+        tagKeyword: z.string().optional().describe("接口标签关键字"),
         limit: z.number().optional().describe("返回结果数量限制，默认20")
       },
-      async ({ projectKeyword, nameKeyword, pathKeyword, limit }) => {
+      async ({ projectKeyword, nameKeyword, pathKeyword, tagKeyword, limit }) => {
         try {
           const searchOptions = {
             projectKeyword,
             nameKeyword: nameKeyword ? nameKeyword.split(/[\s,]+/) : undefined,
             pathKeyword: pathKeyword ? pathKeyword.split(/[\s,]+/) : undefined,
+            tagKeyword: tagKeyword ? tagKeyword.split(/[\s,]+/) : undefined,
             limit: limit || 20
           };
 
@@ -384,7 +386,8 @@ export class YapiMcpServer {
           responseContent += "搜索条件:\n";
           if (projectKeyword) responseContent += `- 项目关键字: ${projectKeyword}\n`;
           if (nameKeyword) responseContent += `- 接口名称关键字: ${nameKeyword}\n`;
-          if (pathKeyword) responseContent += `- API路径关键字: ${pathKeyword}\n\n`;
+          if (pathKeyword) responseContent += `- API路径关键字: ${pathKeyword}\n`;
+          if (tagKeyword) responseContent += `- 标签关键字: ${tagKeyword}\n\n`;
 
           // 按项目分组展示结果
           Object.values(apisByProject).forEach(projectGroup => {
