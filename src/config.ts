@@ -1,6 +1,7 @@
 import { config } from "dotenv";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
+import { Logger } from "./services/yapi/logger";
 
 // Load environment variables from .env file
 config();
@@ -130,18 +131,21 @@ export function getServerConfig(): ServerConfig {
     }
   }
 
+  // 创建日志实例
+  const logger = new Logger("Config", config.yapiLogLevel);
+
   // Log configuration sources
-  console.log("\nConfiguration:");
-  console.log(
+  logger.info("\nConfiguration:");
+  logger.info(
     `- YAPI_BASE_URL: ${config.yapiBaseUrl} (source: ${config.configSources.yapiBaseUrl})`,
   );
-  console.log(
+  logger.info(
     `- YAPI_TOKEN: ${config.yapiToken ? maskApiKey(config.yapiToken) : "未配置"} (source: ${config.configSources.yapiToken})`,
   );
-  console.log(`- PORT: ${config.port} (source: ${config.configSources.port})`);
-  console.log(`- YAPI_CACHE_TTL: ${config.yapiCacheTTL} 分钟 (source: ${config.configSources.yapiCacheTTL})`);
-  console.log(`- YAPI_LOG_LEVEL: ${config.yapiLogLevel} (source: ${config.configSources.yapiLogLevel})`);
-  console.log(); // Empty line for better readability
+  logger.info(`- PORT: ${config.port} (source: ${config.configSources.port})`);
+  logger.info(`- YAPI_CACHE_TTL: ${config.yapiCacheTTL} 分钟 (source: ${config.configSources.yapiCacheTTL})`);
+  logger.info(`- YAPI_LOG_LEVEL: ${config.yapiLogLevel} (source: ${config.configSources.yapiLogLevel})`);
+  logger.info(""); // Empty line for better readability
 
   return config;
 }
