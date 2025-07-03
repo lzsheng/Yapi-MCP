@@ -1,15 +1,16 @@
-# Yapi MCP Server
+# Yapi Auto MCP Server
 
 一个用于 YApi 的 Model Context Protocol (MCP) 服务器，让你能够在 Cursor 等 AI 编程工具中直接操作 YApi 接口文档。
 
 ## 项目简介
 
-Yapi MCP Server 是一个基于 [Model Context Protocol](https://modelcontextprotocol.io/) 的服务器，专为 YApi 接口管理平台设计。它允许你在 Cursor、Claude Desktop 等支持 MCP 的 AI 工具中直接：
+Yapi Auto MCP Server 是一个基于 [Model Context Protocol](https://modelcontextprotocol.io/) 的服务器，专为 YApi 接口管理平台设计。它允许你在 Cursor、Claude Desktop 等支持 MCP 的 AI 工具中直接：
 
 - 🔍 **搜索和查看** YApi 项目中的接口文档
 - ✏️ **创建和更新** 接口定义
 - 📋 **管理项目和分类** 结构
 - 🔗 **无缝集成** AI 编程工作流
+- 🛠 **支持多个 YApi Project配置**
 
 通过 MCP 协议，AI 助手可以理解你的 YApi 接口结构，在编程过程中提供更准确的建议和代码生成。
 
@@ -46,10 +47,11 @@ Yapi MCP Server 是一个基于 [Model Context Protocol](https://modelcontextpro
 ```json
 {
   "mcpServers": {
-    "yapi-mcp": {
+    "yapi-auto-mcp": {
       "command": "npx",
       "args": [
-        "yapi-mcp",
+        "-y",
+        "yapi-auto-mcp",
         "--stdio",
         "--yapi-base-url=https://your-yapi-domain.com",
         "--yapi-token=projectId:your_token_here"
@@ -70,10 +72,11 @@ Yapi MCP Server 是一个基于 [Model Context Protocol](https://modelcontextpro
 ```json
 {
   "mcpServers": {
-    "yapi-mcp": {
+    "yapi-auto-mcp": {
       "command": "npx",
       "args": [
-        "yapi-mcp",
+        "-y",
+        "yapi-auto-mcp",
         "--stdio",
         "--yapi-base-url=https://yapi.example.com",
         "--yapi-token=projectId:token1,projectId2:token2",
@@ -92,9 +95,13 @@ Yapi MCP Server 是一个基于 [Model Context Protocol](https://modelcontextpro
 ```json
 {
   "mcpServers": {
-    "yapi-mcp": {
+    "yapi-auto-mcp": {
       "command": "npx",
-      "args": ["yapi-mcp", "--stdio"],
+      "args": [
+        "-y",
+        "yapi-auto-mcp",
+        "--stdio"
+      ],
       "env": {
         "YAPI_BASE_URL": "https://yapi.example.com",
         "YAPI_TOKEN": "projectId:token1,projectId2:token2",
