@@ -4,7 +4,7 @@
   "description": "Model Context Protocol server for yapi integration",
   "main": "dist/index.js",
   "bin": {
-    "figma-developer-mcp": "./dist/cli.js"
+    "yapi-mcp": "./dist/cli.js"
   },
   "files": [
     "dist",
@@ -29,7 +29,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/GLips/Figma-Context-MCP.git"
+    "url": "https://github.com/lzsheng/Yapi-MCP.git"
   },
   "keywords": [
     "yapi",
