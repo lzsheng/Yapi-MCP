@@ -65,7 +65,7 @@ export function getServerConfig(): ServerConfig {
   const config: ServerConfig = {
     yapiBaseUrl: "http://localhost:3000",
     yapiToken: "",
-    port: 3333,
+    port: 3388,
     yapiCacheTTL: 10, // 默认缓存10分钟
     yapiLogLevel: "info", // 默认日志级别
     configSources: {
