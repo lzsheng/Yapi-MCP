@@ -274,6 +274,7 @@ export class YApiService {
     projectKeyword?: string; // 项目关键字
     nameKeyword?: string[] | string;    // 接口名称关键字，支持数组或字符串
     pathKeyword?: string[] | string;    // 接口路径关键字，支持数组或字符串
+    tagKeyword?: string[] | string;     // 接口标签关键字，支持数组或字符串
     page?: number;           // 当前页码，默认1
     limit?: number;          // 每页数量，默认20
     maxProjects?: number;    // 最多搜索多少个项目，默认5个
@@ -286,6 +287,7 @@ export class YApiService {
       projectKeyword,
       nameKeyword,
       pathKeyword,
+      tagKeyword,
       page = 1,
       limit = 20,
       maxProjects = 5
@@ -294,11 +296,13 @@ export class YApiService {
     // 转换查询关键字为数组
     const nameKeywords = Array.isArray(nameKeyword) ? nameKeyword : nameKeyword ? [nameKeyword] : [];
     const pathKeywords = Array.isArray(pathKeyword) ? pathKeyword : pathKeyword ? [pathKeyword] : [];
+    const tagKeywords = Array.isArray(tagKeyword) ? tagKeyword : tagKeyword ? [tagKeyword] : [];
     
     this.logger.debug(
       `搜索接口 项目关键字: ${projectKeyword || '无'}, ` +
       `接口名称关键字: ${nameKeywords.join(',')} ` +
-      `路径关键字: ${pathKeywords.join(',')}`
+      `路径关键字: ${pathKeywords.join(',')} ` +
+      `标签关键字: ${tagKeywords.join(',')}`
     );
     
     try {
@@ -337,50 +341,53 @@ export class YApiService {
         
         for (const nameKey of nameKeywords.length ? nameKeywords : [""]) {
           for (const pathKey of pathKeywords.length ? pathKeywords : [""]) {
-            // 准备查询参数
-            const queryParams: Record<string, string> = {};
-            if (nameKey) queryParams.keyword = nameKey;
-            if (pathKey) queryParams.path = pathKey;
-            
-            // 执行搜索
-            const projectResults = await this.searchWithSingleKeyword(
-              projectId, 
-              queryParams, 
-              page, 
-              limit
-            );
-            
-            // 添加项目名称和分类名称
-            const resultsWithProjectInfo = await Promise.all(
-              projectResults.list.map(async (item) => {
-                // 添加项目名称
-                const result = { 
-                  ...item, 
-                  project_name: project.name 
-                };
-                
-                // 尝试添加分类名称
-                try {
-                  const catId = String(item.catid);
-                  if (catId) {
-                    // 获取项目的分类列表
-                    const categories = await this.getCategoryList(projectId);
-                    const category = categories.find(cat => String(cat._id) === catId);
-                    if (category) {
-                      result.cat_name = category.name;
+            for (const tagKey of tagKeywords.length ? tagKeywords : [""]) {
+              // 准备查询参数
+              const queryParams: Record<string, any> = {};
+              if (nameKey) queryParams.keyword = nameKey;
+              if (pathKey) queryParams.path = pathKey;
+              if (tagKey) queryParams.tag = [tagKey];
+              
+              // 执行搜索
+              const projectResults = await this.searchWithSingleKeyword(
+                projectId, 
+                queryParams, 
+                page, 
+                limit
+              );
+              
+              // 添加项目名称和分类名称
+              const resultsWithProjectInfo = await Promise.all(
+                projectResults.list.map(async (item) => {
+                  // 添加项目名称
+                  const result = { 
+                    ...item, 
+                    project_name: project.name 
+                  };
+                  
+                  // 尝试添加分类名称
+                  try {
+                    const catId = String(item.catid);
+                    if (catId) {
+                      // 获取项目的分类列表
+                      const categories = await this.getCategoryList(projectId);
+                      const category = categories.find(cat => String(cat._id) === catId);
+                      if (category) {
+                        result.cat_name = category.name;
+                      }
                     }
+                  } catch (error) {
+                    // 忽略获取分类名称的错误
+                    this.logger.debug(`无法获取分类名称，项目ID=${projectId}, 分类ID=${item.catid}:`, error);
                   }
-                } catch (error) {
-                  // 忽略获取分类名称的错误
-                  this.logger.debug(`无法获取分类名称，项目ID=${projectId}, 分类ID=${item.catid}:`, error);
-                }
-                
-                return result;
-              })
-            );
-            
-            // 将结果添加到总结果中
-            allResults = [...allResults, ...resultsWithProjectInfo];
+                  
+                  return result;
+                })
+              );
+              
+              // 将结果添加到总结果中
+              allResults = [...allResults, ...resultsWithProjectInfo];
+            }
           }
         }
       }
@@ -408,7 +415,7 @@ export class YApiService {
    */
   private async searchWithSingleKeyword(
     projectId: string, 
-    queryParams: { keyword?: string; path?: string }, 
+    queryParams: { keyword?: string; path?: string; tag?: string[] }, 
     page: number, 
     limit: number
   ): Promise<{ total: number; list: any[] }> {
