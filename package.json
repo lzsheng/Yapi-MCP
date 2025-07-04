@@ -1,6 +1,6 @@
 {
   "name": "yapi-auto-mcp",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "YApi Auto MCP Server - Model Context Protocol server for YApi integration, enables AI tools like Cursor to interact with YApi API documentation",
   "main": "dist/index.js",
   "bin": {
