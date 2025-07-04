@@ -1,4 +1,5 @@
 import axios, { AxiosError } from "axios";
+import { Logger } from "./yapi/logger";
 
 export interface ApiInterface {
   _id: string;
@@ -26,15 +27,17 @@ export interface GetApiResponse {
 export class YApiService {
   private readonly baseUrl: string;
   private readonly token: string;
+  private readonly logger: Logger;
 
   constructor(baseUrl: string, token: string) {
     this.baseUrl = baseUrl;
     this.token = token;
+    this.logger = new Logger("YApiService", "debug");
   }
 
   private async request<T>(endpoint: string, params: Record<string, any> = {}): Promise<T> {
     try {
-      console.log(`调用 ${this.baseUrl}${endpoint}`);
+      this.logger.debug(`调用 ${this.baseUrl}${endpoint}`);
       const response = await axios.get(`${this.baseUrl}${endpoint}`, {
         params: {
           ...params,

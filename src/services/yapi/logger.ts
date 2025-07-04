@@ -10,21 +10,25 @@ export enum LogLevel {
 }
 
 /**
- * 日志级别字符串映射
- */
-const LOG_LEVEL_MAP: Record<string, LogLevel> = {
-  'debug': LogLevel.DEBUG,
-  'info': LogLevel.INFO,
-  'warn': LogLevel.WARN,
-  'error': LogLevel.ERROR,
-  'none': LogLevel.NONE
-};
-
-/**
  * 获取日志级别
+ * @param level 日志级别字符串
+ * @returns LogLevel 枚举值
  */
-export function getLogLevel(level: string): LogLevel {
-  return LOG_LEVEL_MAP[level.toLowerCase()] ?? LogLevel.INFO;
+function getLogLevel(level: string): LogLevel {
+  switch (level.toLowerCase()) {
+    case 'debug':
+      return LogLevel.DEBUG;
+    case 'info':
+      return LogLevel.INFO;
+    case 'warn':
+      return LogLevel.WARN;
+    case 'error':
+      return LogLevel.ERROR;
+    case 'none':
+      return LogLevel.NONE;
+    default:
+      return LogLevel.INFO;
+  }
 }
 
 /**
@@ -33,10 +37,13 @@ export function getLogLevel(level: string): LogLevel {
 export class Logger {
   private readonly prefix: string;
   private readonly logLevel: LogLevel;
+  private readonly isStdioMode: boolean;
   
   constructor(prefix: string, logLevel: LogLevel | string = LogLevel.INFO) {
     this.prefix = prefix;
     this.logLevel = typeof logLevel === 'string' ? getLogLevel(logLevel) : logLevel;
+    // 检测是否为stdio模式
+    this.isStdioMode = process.env.NODE_ENV === "cli" || process.argv.includes("--stdio");
   }
   
   /**
@@ -46,7 +53,9 @@ export class Logger {
    */
   debug(message: string, ...args: any[]): void {
     if (this.logLevel <= LogLevel.DEBUG) {
-      console.log(`[DEBUG][${this.prefix}] ${message}`, ...args);
+      // 在stdio模式下使用console.warn避免干扰协议通信
+      const logMethod = this.isStdioMode ? console.warn : console.log;
+      logMethod(`[DEBUG][${this.prefix}] ${message}`, ...args);
     }
   }
   
@@ -57,7 +66,9 @@ export class Logger {
    */
   info(message: string, ...args: any[]): void {
     if (this.logLevel <= LogLevel.INFO) {
-      console.log(`[INFO][${this.prefix}] ${message}`, ...args);
+      // 在stdio模式下使用console.warn避免干扰协议通信
+      const logMethod = this.isStdioMode ? console.warn : console.log;
+      logMethod(`[INFO][${this.prefix}] ${message}`, ...args);
     }
   }
   
