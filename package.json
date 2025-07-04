@@ -1,7 +1,7 @@
 {
   "name": "yapi-auto-mcp",
   "version": "0.1.2",
-  "description": "Model Context Protocol server for yapi integration",
+  "description": "YApi Auto MCP Server - Model Context Protocol server for YApi integration, enables AI tools like Cursor to interact with YApi API documentation",
   "main": "dist/index.js",
   "bin": {
     "yapi-mcp": "./dist/cli.js"
@@ -34,9 +34,21 @@
   "keywords": [
     "yapi",
     "mcp",
-    "typescript"
+    "typescript",
+    "model-context-protocol",
+    "api-documentation",
+    "cursor",
+    "ai-tools",
+    "api-management",
+    "yapi-integration",
+    "claude",
+    "anthropic",
+    "ai-assistant",
+    "interface-management",
+    "api-design",
+    "documentation-tool"
   ],
-  "author": "",
+  "author": "liangzhensheng <372959130@qq.com>",
   "license": "MIT",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.6.0",
